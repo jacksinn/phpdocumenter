@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"bufio"
+	"regexp"
 )
 
 func main() {
@@ -14,12 +15,16 @@ func main() {
 
 	defer file.Close()
 
-	var lines []string
+	var functions []string
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-		lines = append(lines, scanner.Text())
+		//fmt.Println(scanner.Text())
+		matched, _ := regexp.MatchString("function *", scanner.Text())
+		if matched {
+			fmt.Println("Found function: ", scanner.Text())
+			functions = append(functions, scanner.Text())
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
